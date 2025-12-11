@@ -1,0 +1,242 @@
+# Functional Category Taxonomy for Multiplexed Tissue Imaging Antibodies
+# Defines the classification framework for antibody markers
+
+categories:
+  immune_cell_typing:
+    name: "Immune Cell Typing"
+    description: "Markers used to identify and classify immune cell types"
+    keywords:
+      - CD3
+      - CD4
+      - CD8
+      - CD20
+      - CD68
+      - CD45
+      - lymphocyte
+      - T cell
+      - B cell
+      - macrophage
+      - leukocyte
+    examples:
+      - "CD3 (T cells)"
+      - "CD20 (B cells)"
+      - "CD68 (macrophages)"
+      - "CD45 (pan-leukocyte)"
+
+  segmentation:
+    name: "Segmentation"
+    description: "Markers used for cellular or tissue compartment segmentation"
+    keywords:
+      - pan-cytokeratin
+      - PanCK
+      - cytokeratin
+      - DAPI
+      - nucleus
+      - membrane
+      - cytoplasm
+      - E-cadherin
+      - beta-catenin
+    examples:
+      - "Pan-Cytokeratin"
+      - "DAPI"
+      - "Beta-catenin"
+      - "E-cadherin"
+
+  lymphocyte_profiling:
+    name: "Lymphocyte Profiling"
+    description: "Markers specific to lymphocyte subtypes and functional states"
+    keywords:
+      - CD4
+      - CD8
+      - FOXP3
+      - CD25
+      - Granzyme
+      - T cell
+      - regulatory
+      - Treg
+      - cytotoxic
+      - helper
+    examples:
+      - "CD4 (helper T cells)"
+      - "CD8 (cytotoxic T cells)"
+      - "FOXP3 (regulatory T cells)"
+      - "Granzyme B (cytotoxic)"
+
+  myeloid_profiling:
+    name: "Myeloid Profiling"
+    description: "Markers for myeloid cell identification and characterization"
+    keywords:
+      - CD68
+      - CD163
+      - CD11b
+      - CD11c
+      - myeloid
+      - macrophage
+      - dendritic
+      - monocyte
+      - M1
+      - M2
+    examples:
+      - "CD68 (pan-macrophage)"
+      - "CD163 (M2 macrophage)"
+      - "CD11c (dendritic cells)"
+
+  immune_activation:
+    name: "Immune Activation"
+    description: "Markers indicating immune cell activation and checkpoint status"
+    keywords:
+      - HLA-DR
+      - CD69
+      - CD25
+      - activation
+      - MHC
+      - IFN
+      - PD-1
+      - PD-L1
+      - CTLA-4
+      - checkpoint
+    examples:
+      - "HLA-DR"
+      - "CD69"
+      - "PD-1"
+      - "PD-L1"
+      - "CTLA-4"
+
+  proliferation:
+    name: "Proliferation"
+    description: "Markers of cell proliferation and cell cycle activity"
+    keywords:
+      - Ki67
+      - Ki-67
+      - PCNA
+      - proliferation
+      - cell cycle
+      - mitosis
+    examples:
+      - "Ki67"
+      - "PCNA"
+
+  tissue_architecture:
+    name: "Tissue Architecture"
+    description: "Markers defining tissue structure, stroma, and extracellular matrix"
+    keywords:
+      - collagen
+      - SMA
+      - smooth muscle
+      - actin
+      - vimentin
+      - fibroblast
+      - stroma
+      - FAP
+      - podoplanin
+    examples:
+      - "Smooth Muscle Actin (SMA)"
+      - "Vimentin"
+      - "Collagen"
+      - "FAP (fibroblast activation protein)"
+
+  hypoxia:
+    name: "Hypoxia"
+    description: "Markers of hypoxic conditions and responses in tissue"
+    keywords:
+      - HIF
+      - CA9
+      - CAIX
+      - hypoxia
+      - carbonic anhydrase
+      - HIF1a
+      - HIF2a
+    examples:
+      - "CA9 (carbonic anhydrase IX)"
+      - "HIF1a"
+
+  tumor_specific:
+    name: "Tumor-Specific"
+    description: "Markers specific to tumor cells or tumor-associated antigens"
+    keywords:
+      - tumor
+      - cancer
+      - carcinoma
+      - melanoma
+      - HER2
+      - EGFR
+      - PSA
+      - CEA
+      - MUC1
+      - epithelial
+    examples:
+      - "HER2"
+      - "EGFR"
+      - "PSA"
+      - "CEA"
+
+  signaling:
+    name: "Signaling"
+    description: "Markers related to cellular signaling pathways (often phosphorylated proteins)"
+    keywords:
+      - phospho
+      - pERK
+      - pAKT
+      - pSTAT
+      - signaling
+      - pathway
+      - kinase
+      - p-
+    examples:
+      - "pERK"
+      - "pAKT"
+      - "pSTAT3"
+      - "p-S6"
+
+  cell_metabolism:
+    name: "Cell Metabolism"
+    description: "Markers related to cellular metabolic processes and energy production"
+    keywords:
+      - metabolism
+      - GLUT
+      - glucose
+      - ATP
+      - mitochondrial
+      - LDHA
+      - MCT
+      - metabolic
+    examples:
+      - "GLUT1 (glucose transporter)"
+      - "CPT1A"
+      - "LDHA"
+
+  secondary_antibody:
+    name: "Secondary Antibody"
+    description: "Secondary antibodies or isotype controls used in staining protocols"
+    keywords:
+      - secondary
+      - isotype
+      - control
+      - IgG
+      - IgM
+      - IgA
+      - anti-mouse
+      - anti-rabbit
+      - anti-goat
+      - conjugated
+    examples:
+      - "Anti-mouse IgG"
+      - "Isotype Control"
+      - "Secondary antibody"
+
+  blank:
+    name: "Blank/Background"
+    description: "Blank channels or background controls with no specific antibody"
+    keywords:
+      - blank
+      - empty
+      - background
+      - control
+      - unstained
+      - negative
+      - null
+      - none
+    examples:
+      - "Blank"
+      - "Empty channel"
+      - "Background control"

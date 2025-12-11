@@ -1,0 +1,21 @@
+# Core dependencies
+anthropic>=0.40.0
+pandas>=2.0.0
+pydantic>=2.0.0
+pyyaml>=6.0
+
+# API and HTTP
+requests>=2.31.0
+tenacity>=8.2.0  # For retry logic
+
+# Data validation and processing
+python-dateutil>=2.8.2
+openpyxl>=3.1.0  # For Excel file support if needed
+
+# CLI and utilities
+click>=8.1.0
+rich>=13.0.0  # For beautiful terminal output
+python-dotenv>=1.0.0  # For environment variables
+
+# Optional: For more advanced features
+# sqlite-utils>=3.34  # If using sqlite-utils for easier DB operations
