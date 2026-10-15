@@ -2,6 +2,127 @@
 
 An intelligent agentic system for curating and harmonizing antibody metadata from multiplexed tissue imaging experiments. Built using the Claude Agent SDK principles with a multi-agent orchestration architecture.
 
+## System Architecture & Workflow
+
+```mermaid
+flowchart TD
+    Start([User runs:<br/>python main.py curate CSV]) --> CLI[main.py CLI Interface]
+
+    CLI --> Orchestrator[AntibodyCurationOrchestrator<br/>Coordinates workflow pipeline]
+
+    Orchestrator --> StateInit[StateManager<br/>Initialize run & checkpointing]
+
+    StateInit --> Stage1[Stage 1: PARSING]
+
+    subgraph Stage1[" Stage 1: CSV Parsing "]
+        S1Start[CSVParserAgent] --> CSVAnalyzer[CSV Schema Detector Tool<br/>LLM-powered column mapping]
+        CSVAnalyzer --> S1Parse[Parse CSV rows<br/>Normalize to common schema]
+        S1Parse --> S1Check[Checkpoint: Save parsed records]
+    end
+
+    Stage1 --> Stage2[Stage 2: ENRICHING]
+
+    subgraph Stage2[" Stage 2: UniProt Enrichment "]
+        S2Start[UniProtLookupAgent] --> S2API[UniProt API Tool<br/>with SQLite cache]
+        S2API --> S2Enrich[Fetch protein IDs,<br/>gene names, locations]
+        S2Enrich --> S2Confidence[Score confidence<br/>of matches]
+        S2Confidence --> S2Check[Checkpoint: Save enriched records]
+    end
+
+    Stage2 --> Stage3[Stage 3: CLASSIFYING]
+
+    subgraph Stage3[" Stage 3: Functional Classification "]
+        S3Start[ClassificationAgent] --> S3Tax[Functional Taxonomy<br/>Load from config/taxonomy.yaml]
+        S3Tax --> S3Classify[Classifier Tool<br/>Multi-label categorization]
+        S3Classify --> S3Assign[Assign categories:<br/>immune typing, proliferation, etc.]
+        S3Assign --> S3Check[Checkpoint: Save classified records]
+    end
+
+    Stage3 --> Stage4[Stage 4: HARMONIZING]
+
+    subgraph Stage4[" Stage 4: Harmonization "]
+        S4Start[HarmonizationAgent] --> S4Standard[Standardize nomenclature<br/>CD3 vs cd-3 vs CD-3]
+        S4Standard --> S4Dedup{Simplified<br/>output mode?}
+        S4Dedup -->|No| S4Merge[Merge duplicate entries<br/>Combine metadata]
+        S4Dedup -->|Yes| S4Skip[Skip deduplication<br/>1:1 input-output mapping]
+        S4Merge --> S4Check[Checkpoint: Save harmonized records]
+        S4Skip --> S4Check
+    end
+
+    Stage4 --> Stage5[Stage 5: VERIFYING]
+
+    subgraph Stage5[" Stage 5: Verification "]
+        S5Start[VerificationAgent] --> S5Rules[Validators Tool<br/>Rules-based checks]
+        S5Rules --> S5LLM[LLM Semantic Validation<br/>Ambiguity detection]
+        S5LLM --> S5Split[Split records:<br/>validated vs flagged]
+        S5Split --> S5Report[Generate validation report]
+    end
+
+    Stage5 --> Output[Output Generation]
+
+    subgraph Output[" Output Files "]
+        Output1[curated_antibodies.csv<br/>or curated_simple.csv]
+        Output2[curated_antibodies.json<br/>or curated_full.json]
+        Output3[validation_report.txt]
+        Output4[flagged_for_review.csv<br/>if any issues found]
+    end
+
+    Output --> Stats[Calculate Statistics<br/>enrichment rate, success rate, etc.]
+    Stats --> Complete([Workflow Complete<br/>Display results to user])
+
+    %% State Management
+    StateInit -.->|Read/Write| StateDB[(SQLite State DB<br/>workflow_runs<br/>workflow_checkpoints)]
+
+    %% Caching
+    S2API -.->|Cache lookups| CacheDB[(SQLite Cache DB<br/>30-day TTL)]
+
+    %% Error Handling
+    Stage1 -.->|Error| ErrorHandler[Error Handler:<br/>Save state, allow resume]
+    Stage2 -.->|Error| ErrorHandler
+    Stage3 -.->|Error| ErrorHandler
+    Stage4 -.->|Error| ErrorHandler
+    Stage5 -.->|Error| ErrorHandler
+    ErrorHandler -.->|Resume with<br/>--resume flag| StateInit
+
+    %% Styling
+    classDef agentClass fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef toolClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef stageClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef dataClass fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+
+    class S1Start,S2Start,S3Start,S4Start,S5Start agentClass
+    class CSVAnalyzer,S2API,S3Classify,S5Rules toolClass
+    class StateDB,CacheDB dataClass
+```
+
+### Key Components
+
+**Orchestrator Layer:**
+- **AntibodyCurationOrchestrator** - Main coordinator managing workflow pipeline
+- **StateManager** - SQLite-based checkpointing and resume capability
+
+**Agent Layer (Specialized Agents):**
+- **CSVParserAgent** - Handles varied CSV structures with LLM-powered schema detection
+- **UniProtLookupAgent** - Enriches with protein database information
+- **ClassificationAgent** - Assigns functional categories using taxonomy
+- **HarmonizationAgent** - Deduplicates and standardizes nomenclature
+- **VerificationAgent** - Validates quality with rules + LLM checks
+
+**Tool Layer (Reusable Utilities):**
+- **csv_analyzer.py** - LLM-powered CSV column mapping
+- **uniprot_api.py** - REST API client with caching
+- **classifier.py** - Multi-label functional classifier
+- **validators.py** - Rules-based + semantic validation
+
+### Feedback Loop Pattern
+
+Each agent follows the Claude Agent SDK feedback loop:
+1. **Gather Context** - Load data and configuration
+2. **Take Action** - Execute specialized task (parse, enrich, classify, etc.)
+3. **Verify Work** - Check results, handle errors
+4. **Checkpoint** - Save state for resumability
+5. **Repeat** - Continue to next stage
+
 ## Overview
 
 This system automates the curation of antibody panels by:
